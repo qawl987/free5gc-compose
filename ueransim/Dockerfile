@@ -28,7 +28,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install runtime dependencies + ping
 RUN apt-get update \
-    && apt-get install libsctp-dev lksctp-tools iproute2 iputils-ping procps psmisc -y \
+    && apt-get install libsctp-dev lksctp-tools iproute2 iputils-ping procps psmisc tcpdump iperf3 -y \
     && apt-get clean
 
 WORKDIR /ueransim

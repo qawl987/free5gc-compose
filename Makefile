@@ -38,3 +38,14 @@ nef: base
 
 webconsole: base
 	docker build -t ${DOCKER_IMAGE_OWNER}/webconsole-base:${DOCKER_IMAGE_TAG} -f ./base/Dockerfile.nf.webconsole ./base
+
+push_local:
+	docker tag free5gc/$(NF)-base:latest localhost:32000/free5gc/$(NF)-base:v4.1.0
+	docker push localhost:32000/free5gc/$(NF)-base:v4.1.0
+
+build_push_all:
+	@for nf in $(NF_LIST); do \
+		echo "===== Building $$nf ====="; \
+		$(MAKE) $$nf && \
+		$(MAKE) NF=$$nf push_local || exit 1; \
+	done

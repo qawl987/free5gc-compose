@@ -18,8 +18,11 @@ FROM alpine:3.15
 
 ARG F5GC_MODULE
 
+RUN apk update && apk add --no-cache tcpdump iperf3 iptables iproute2
 WORKDIR /free5gc
 RUN mkdir -p cert/ public
+RUN mkdir -p /etc/iproute2
+RUN touch /etc/iproute2/rt_tables
 
 # Copy executables
 COPY --from=my-base /go/src/free5gc/bin/${F5GC_MODULE} ./
