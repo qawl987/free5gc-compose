@@ -37,7 +37,7 @@ services:
 networks:
   privnet:
     external: true
-    name: br-free5gc
+    name: free5gc-compose_privnet
 
 volumes:
   prometheus_data:

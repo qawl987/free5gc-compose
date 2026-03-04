@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  loki:
+    image: grafana/loki:2.9.2
+    container_name: loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100" # Loki API port, 暴露給 Docker 主機
+    volumes:
+      - ./config/loki-config.yaml:/etc/loki/local-config.yaml
+    networks:
+      privnet:
+        aliases:
+          - loki
+
+networks:
+  privnet:
+    external: true
+    name: free5gc-compose_privnet

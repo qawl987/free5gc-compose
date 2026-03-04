@@ -1,5 +1,13 @@
 version: "3.8"
 
+x-logging: &logging-config
+  driver: loki
+  options:
+    # Docker Driver 運行在主機上，所以使用 localhost 或 127.0.0.1 來訪問 Loki 暴露的端口
+    loki-url: "http://127.0.0.1:3100/loki/api/v1/push"
+    # 為所有來自此 compose 檔案的日誌添加一個固定的 job 標籤
+    loki-external-labels: "job=free5gc"
+
 services:
   free5gc-upf:
     container_name: upf
@@ -14,6 +22,7 @@ services:
       privnet:
         aliases:
           - upf.free5gc.org
+    logging: *logging-config
 
   db:
     container_name: mongodb
@@ -27,6 +36,7 @@ services:
       privnet:
         aliases:
           - db
+    logging: *logging-config
 
   free5gc-nrf:
     container_name: nrf
@@ -46,6 +56,7 @@ services:
           - nrf.free5gc.org
     depends_on:
       - db
+    logging: *logging-config
 
   free5gc-amf:
     container_name: amf
@@ -65,6 +76,7 @@ services:
           - amf.free5gc.org
     depends_on:
       - free5gc-nrf
+    logging: *logging-config
 
   free5gc-ausf:
     container_name: ausf
@@ -83,6 +95,7 @@ services:
           - ausf.free5gc.org
     depends_on:
       - free5gc-nrf
+    logging: *logging-config
 
   free5gc-nssf:
     container_name: nssf
@@ -101,6 +114,7 @@ services:
           - nssf.free5gc.org
     depends_on:
       - free5gc-nrf
+    logging: *logging-config
 
   free5gc-pcf:
     container_name: pcf
@@ -119,6 +133,7 @@ services:
           - pcf.free5gc.org
     depends_on:
       - free5gc-nrf
+    logging: *logging-config
 
   free5gc-smf:
     container_name: smf
@@ -139,6 +154,7 @@ services:
     depends_on:
       - free5gc-nrf
       - free5gc-upf
+    logging: *logging-config
 
   free5gc-udm:
     container_name: udm
@@ -158,6 +174,7 @@ services:
     depends_on:
       - db
       - free5gc-nrf
+    logging: *logging-config
 
   free5gc-udr:
     container_name: udr
@@ -178,6 +195,7 @@ services:
     depends_on:
       - db
       - free5gc-nrf
+    logging: *logging-config
 
   free5gc-chf:
     container_name: chf
@@ -199,6 +217,7 @@ services:
       - db
       - free5gc-nrf
       - free5gc-webui
+    logging: *logging-config
 
   free5gc-n3iwf:
     container_name: n3iwf
@@ -220,6 +239,7 @@ services:
       - free5gc-amf
       - free5gc-smf
       - free5gc-upf
+    logging: *logging-config
 
   free5gc-tngf:
     container_name: tngf
@@ -256,6 +276,7 @@ services:
     depends_on:
       - db
       - free5gc-nrf
+    logging: *logging-config
 
   free5gc-webui:
     container_name: webui
@@ -278,6 +299,7 @@ services:
     depends_on:
       - db
       - free5gc-nrf
+    logging: *logging-config
 
   ueransim:
     container_name: ueransim
